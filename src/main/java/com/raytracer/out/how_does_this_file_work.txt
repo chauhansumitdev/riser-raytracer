@@ -1,0 +1,17 @@
+ppm - > portable pizelmap is a image format which is more readable and easier to format and create.
+
+structure::
+
+
+<header data>
+P3/P6 -> specifies the type of ppm file , p3 - ASCII ... p6 -> binary (not readable) >> go for the p3 version
+xx xx<width and height>
+255 <max supportable colour range>
+
+</// pixel data ....
+
+triplet of three makes one pixel
+
+255 0 0        0 255 0     etc ....
+
+///>
