@@ -1,39 +1,28 @@
 package com.raytracer.riser;
 
-
-// testing image files and other stuffs .. this probably wont be the project main executable file .. search for App.java for executing the project
-// this is for TESTINGGGGG>>>>>>>>>>>>>>>>>>............
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        int width = 320;
+        int height = 200;
+        Vector camera = new Vector(0, 0, -1);
 
-//        Color red = new Color(1,0,0);
-//        Color green = new Color(0,1,0);
-//        Color blue = new Color(0,0,1);
-//
-//        Image image = new Image(1,3);
-//        image.set_pixel(0,0,red);
-//        image.set_pixel(0,1,green);
-//        image.set_pixel(0,2,blue);
-//
-//        image.create_file("test_one.ppm");
+        Material redMaterial = new Material(new Color(1.0, 0.0, 0.0));
+        Material greenMaterial = new Material(new Color(0.0, 1.0, 0.0));
+        Material blueMaterial = new Material(new Color(0.0, 0.0, 1.0));
 
-        // making a blue gradient;
+        List<Sphere> spheres = new ArrayList<>();
+        spheres.add(new Sphere(new Vector(0.0, 0.0, 1.0), 0.5, redMaterial)); // Sphere in front of the camera
+        spheres.add(new Sphere(new Vector(1.0, 0.0, 2.0), 0.5, greenMaterial)); // Sphere to the right
+        spheres.add(new Sphere(new Vector(-1.0, 0.0, 2.0), 0.5, blueMaterial)); // Sphere to the left
 
-        Image image = new Image(100, 100);
+        Scene scene = new Scene(spheres, camera, height, width);
 
-        double value = 0.01;
+        Engine engine = new Engine();
+        Image image = engine.render(scene);
 
-        for(int i=0;i<100;i++){
-            for(int j=0;j<100;j++){
-                Color color = new Color(0,value,0);
-                image.set_pixel(i,j,color);
-            }
-            value+=0.01;
-        }
-
-        image.create_file("green_gradient.ppm");
-
+        image.createFile("output.ppm");
     }
 }
