@@ -1,5 +1,7 @@
 package com.raytracer.riser;
 
+import java.util.Random;
+
 public class Vector {
     public double x;
     public double y;
@@ -56,5 +58,18 @@ public class Vector {
             throw new ArithmeticException("Cannot divide by zero.");
         }
         return new Color(this.x / value, this.y / value, this.z / value);
+    }
+
+    public double length_squared() {
+        return x * x + y * y + z * z;
+    }
+
+    public static Vector random_in_unit_sphere() {
+        Random rand = new Random();
+        Vector p;
+        do {
+            p = new Vector(rand.nextDouble() * 2.0 - 1.0, rand.nextDouble() * 2.0 - 1.0, rand.nextDouble() * 2.0 - 1.0);
+        } while (p.length_squared() >= 1.0);
+        return p;
     }
 }

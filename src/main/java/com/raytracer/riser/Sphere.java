@@ -27,4 +27,15 @@ public class Sphere {
 
         return -1.0;
     }
+
+    public boolean scatter(Ray ray, Vector hit_point, Vector normal, Color attenuation, Ray scattered){
+        Vector target = hit_point.add(normal).add(Vector.random_in_unit_sphere());
+        scattered.origin = hit_point;
+        scattered.direction = target.subtract(hit_point);
+        attenuation.x = 0.5;
+        attenuation.y = 0.5;
+        attenuation.z = 0.5;
+
+        return true;
+    }
 }

@@ -1,11 +1,9 @@
 package com.raytracer.riser;
 import  com.raytracer.ppm_to_jpg_converter.PPMToJPG;
-
 import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-
         Vector left_corner = new Vector(-2, -1, -1);
         Vector horizontal = new Vector(4, 0, 0);
         Vector vertical = new Vector(0, 2, 0);
@@ -20,9 +18,14 @@ public class Main {
 
         Random rand = new Random();
 
-        System.out.println("Rendering: Estimated time 1min");
+        System.out.println("Rendering Image ...");
 
+        int count = 0;
         for (int i = 0; i < 1440; i++) {
+            if(i%15 == 0){
+                count++;
+                System.out.println(count+"% completed.");
+            }
             for (int j = 0; j < 720; j++) {
                 Color pixelColor = new Color(0, 0, 0);
                 for (int s = 0; s < samplesPerPixel; s++) {
@@ -36,11 +39,10 @@ public class Main {
 
                     Ray ray = new Ray(origin, f);
 
-                    pixelColor = pixelColor.add(getRayColor(ray, sphere, ground));
-
+                    pixelColor = pixelColor.add(getRayColor(ray, sphere, ground, 0));
                 }
                 pixelColor = pixelColor.divide_by_scalar_clr(samplesPerPixel);
-                image.setPixel(719-j,i,pixelColor);
+                image.setPixel(719 - j, i, pixelColor);
             }
         }
 
@@ -51,24 +53,56 @@ public class Main {
         ppmToJPG.convert(fileNames);
     }
 
-    private static Color getRayColor(Ray ray, Sphere sphere, Sphere ground) {
+    private static Color getRayColor(Ray ray, Sphere sphere, Sphere ground, int depth) {
         double t_sphere = sphere.is_intersected(ray);
         double t_ground = ground.is_intersected(ray);
 
         if (t_sphere > 0 && t_ground > 0) {
+            Vector hitPoint = ray.get_position_at_t(Math.min(t_sphere, t_ground));
+            Vector normal;
+            Sphere hitSphere;
+
             if (t_sphere < t_ground) {
-                Vector sphere_normal = ray.get_position_at_t(t_sphere).subtract(sphere.center).normalize();
-                return new Color((sphere_normal.x + 1) * 0.5, (sphere_normal.y + 1) * 0.5, (sphere_normal.z + 1) * 0.5);
+                normal = hitPoint.subtract(sphere.center).normalize();
+                hitSphere = sphere;
             } else {
-                Vector ground_normal = ray.get_position_at_t(t_ground).subtract(ground.center).normalize();
-                return new Color((ground_normal.x + 1) * 0.5, (ground_normal.y + 1) * 0.5, (ground_normal.z + 1) * 0.5);
+                normal = hitPoint.subtract(ground.center).normalize();
+                hitSphere = ground;
+            }
+
+            Ray scattered = new Ray(hitPoint, normal.add(Vector.random_in_unit_sphere()));
+            Color attenuation = new Color(1, 1, 1); // Initial attenuation
+
+            if (depth < 50 && hitSphere.scatter(ray, hitPoint, normal, attenuation, scattered)) {
+                Color scatteredColor = getRayColor(scattered, sphere, ground, depth + 1);
+                return attenuation.multiply(scatteredColor);
+            } else {
+                return new Color(0, 0, 0);
             }
         } else if (t_sphere > 0) {
-            Vector sphere_normal = ray.get_position_at_t(t_sphere).subtract(sphere.center).normalize();
-            return new Color((sphere_normal.x + 1) * 0.5, (sphere_normal.y + 1) * 0.5, (sphere_normal.z + 1) * 0.5);
+            Vector hitPoint = ray.get_position_at_t(t_sphere);
+            Vector normal = hitPoint.subtract(sphere.center).normalize();
+            Ray scattered = new Ray(hitPoint, normal.add(Vector.random_in_unit_sphere()));
+            Color attenuation = new Color(1, 1, 1); // Initial attenuation
+
+            if (depth < 50 && sphere.scatter(ray, hitPoint, normal, attenuation, scattered)) {
+                Color scatteredColor = getRayColor(scattered, sphere, ground, depth + 1);
+                return attenuation.multiply(scatteredColor);
+            } else {
+                return new Color(0, 0, 0);
+            }
         } else if (t_ground > 0) {
-            Vector ground_normal = ray.get_position_at_t(t_ground).subtract(ground.center).normalize();
-            return new Color((ground_normal.x + 1) * 0.5, (ground_normal.y + 1) * 0.5, (ground_normal.z + 1) * 0.5);
+            Vector hitPoint = ray.get_position_at_t(t_ground);
+            Vector normal = hitPoint.subtract(ground.center).normalize();
+            Ray scattered = new Ray(hitPoint, normal.add(Vector.random_in_unit_sphere()));
+            Color attenuation = new Color(1, 1, 1); // Initial attenuation
+
+            if (depth < 50 && ground.scatter(ray, hitPoint, normal, attenuation, scattered)) {
+                Color scatteredColor = getRayColor(scattered, sphere, ground, depth + 1);
+                return attenuation.multiply(scatteredColor);
+            } else {
+                return new Color(0, 0, 0);
+            }
         } else {
             Vector normalized_dir = ray.direction.normalize();
             double t = 0.5 * (normalized_dir.y + 1.0);
@@ -79,11 +113,6 @@ public class Main {
         }
     }
 }
-
-
-
-
-
 
 
 

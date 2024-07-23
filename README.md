@@ -1,5 +1,6 @@
 # riser-raytracer
 
+![shaded_sphere](src/main/java/com/raytracer/out/ppm_to_jpg/shaded_sphere.jpg)
 ![high_res_aliased_sphere_ground](src/main/java/com/raytracer/out/ppm_to_jpg/high_res_aliased_sphere_ground.jpg)
 
 ![sphere_normal_test_one](src/main/java/com/raytracer/out/ppm_to_jpg/sphere_normal_test_one.jpg)
