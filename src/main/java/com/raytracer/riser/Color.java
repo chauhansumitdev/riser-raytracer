@@ -6,11 +6,11 @@ public class Color extends Vector {
         super(r, g, b);
     }
 
-    public String getColorValues() {
+    public String get_color_value() {
         return "R: " + x + ", G: " + y + ", B: " + z;
     }
 
-    public static Color fromHex(String hex) {
+    public static Color hex_to_rgb(String hex) {
         int r = Integer.valueOf(hex.substring(1, 3), 16);
         int g = Integer.valueOf(hex.substring(3, 5), 16);
         int b = Integer.valueOf(hex.substring(5, 7), 16);

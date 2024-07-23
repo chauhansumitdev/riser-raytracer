@@ -22,9 +22,9 @@ public class Image {
         double yCurr = color.y;
         double zCurr = color.z;
 
-        int red = (int) Math.round(Math.max(Math.min(xCurr * 255, 255), 0));
-        int green = (int) Math.round(Math.max(Math.min(yCurr * 255, 255), 0));
-        int blue = (int) Math.round(Math.max(Math.min(zCurr * 255, 255), 0));
+        int red = (int) Math.round(Math.max(Math.min(xCurr * 256, 255), 0));
+        int green = (int) Math.round(Math.max(Math.min(yCurr * 256, 255), 0));
+        int blue = (int) Math.round(Math.max(Math.min(zCurr * 256, 255), 0));
 
         image[x][y][0] = red;
         image[x][y][1] = green;

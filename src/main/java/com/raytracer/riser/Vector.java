@@ -11,20 +11,20 @@ public class Vector {
         this.z = z;
     }
 
-    public String getVectorValues() {
+    public String get_vector_values() {
         return x + " " + y + " " + z;
     }
 
-    public double getDotProduct(Vector other) {
+    public double get_dot_product(Vector other) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
-    public double getMagnitude() {
-        return Math.sqrt(getDotProduct(this));
+    public double get_magnitude() {
+        return Math.sqrt(get_dot_product(this));
     }
 
     public Vector normalize() {
-        double magnitude = getMagnitude();
+        double magnitude = get_magnitude();
         if (magnitude == 0) {
             System.err.println("Magnitude is zero. Cannot perform normalization.");
             return this;
@@ -36,7 +36,7 @@ public class Vector {
         return new Vector(this.x + other.x, this.y + other.y, this.z + other.z);
     }
 
-    public Vector multiplyByScalar(double value) {
+    public Vector multiply_by_scalar(double value) {
         return new Vector(this.x * value, this.y * value, this.z * value);
     }
 
@@ -44,10 +44,17 @@ public class Vector {
         return new Vector(this.x - other.x, this.y - other.y, this.z - other.z);
     }
 
-    public Vector divideByScalar(double value) {
+    public Vector divide_by_scalar(double value) {
         if (value == 0) {
             throw new ArithmeticException("Cannot divide by zero.");
         }
         return new Vector(this.x / value, this.y / value, this.z / value);
+    }
+
+    public Color divide_by_scalar_clr(double value) {
+        if (value == 0) {
+            throw new ArithmeticException("Cannot divide by zero.");
+        }
+        return new Color(this.x / value, this.y / value, this.z / value);
     }
 }

@@ -9,4 +9,8 @@ public class Ray {
         this.origin = origin;
         this.direction = direction.normalize();
     }
+
+    public Vector get_position_at_t(double t){
+        return origin.add(direction.multiply_by_scalar(t));
+    }
 }
