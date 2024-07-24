@@ -1,0 +1,37 @@
+theory related to the vector class
+
+most of the things are self explanatory, but i would like to focus on one of the functions here:
+
+    public static Vector random_in_unit_sphere() {
+        Random rand = new Random();
+        Vector p;
+        do {
+            p = new Vector(rand.nextDouble() * 2.0 - 1.0, rand.nextDouble() * 2.0 - 1.0, rand.nextDouble() * 2.0 - 1.0);
+        } while (p.length_squared() >= 1.0);
+        return p;
+    }
+
+what this method does is - it creates a unit sphere at the origin of unit rad, extending values of x,y,z from -1 till 1.
+
+rand.nextDouble() would give a value between 0.0 to 1.0(exclusive)
+we multiply it by 2 to scale its value
+and subtract the scaled value to -1 to bound between -1 to 1.
+
+some tests:
+
+rand.nextDouble(): outs for some 4 tests
+0.2 0.4 0.6 0.8  -> the values would suresly have more values after decimal just for the easy sake im taking one point of decimal
+
+now scale it *2
+0.4 0.8 1.2 1.6
+
+subtract -1
+
+-0.6 -0.2 0.2 0.6
+
+we have values that lie in the bounded range.
+
+we need to check if the random vector we generated lies withing the sphere or not, this can be done by considering the equation of the sphere
+therefore we need to get the squared values of the x,y,z coord
+if we get it greater it lies outside we move on ..
+if lesser it lies inside and we take it and return that random vector

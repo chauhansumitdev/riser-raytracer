@@ -1,0 +1,12 @@
+the scene contains the array of objects in our case it is the spheres.
+
+one of the important function here is the get get_ray_color(Ray ray, int depth)
+
+the ray is the ray for the particular pixel and the depth is the number of times the ray bounced off the surface.
+
+we in this take that ray and find the point of intersection with each object int the scene
+if it intersects .. good then we take the minimum distance because obviously the camera would
+see the nearer object and the further objects are hidden behind so, therefore we
+need the nearer object intersection point with the ray
+
+after we have got it now we would bounce it off in a random direction for now as diffuse is the only material implemented with initial values Color(1,1,1)

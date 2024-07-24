@@ -1,0 +1,45 @@
+sphere
+mathematical equation:
+
+center(h,k,l)
+(x−h)2+(y−k) 2+(z−l) 2=r2 (2s are raised to the power)
+
+if the sum of the values comes to be lesser the point lies inside the sphere
+equal to  - on the sphere
+greater - out of the sphere
+
+
+ref read : sphere_intersection_theory.txt for the intersection part of the ray and sphere.
+this would explain the is_intersected(Ray ray) method
+
+
+moving on ..
+
+
+    public boolean scatter(Ray ray, Vector hit_point, Vector normal, Color attenuation, Ray scattered){
+        Vector target = hit_point.add(normal).add(Vector.random_in_unit_sphere());
+        scattered.origin = hit_point;
+        scattered.direction = target.subtract(hit_point);
+        attenuation.x = 0.5;
+        attenuation.y = 0.5;
+        attenuation.z = 0.5;
+
+        return true;
+    }
+
+this method creates a diffused material.
+
+diffused material -
+these types of materials emit the rays in random direction when hit, therefore using a way to randomise this is
+useful to get these types of material working .. ref read vector.txt
+
+variables realted to the sphere -
+hit_point -- vector of the point of intersection with the sphere
+normal -- at the point of intersection
+attenuation -- color at the hit_point
+
+ray - is the previous ray
+scattered is the new ray with random direction.
+
+the attenuation after every hit is 1/2 which gives exponential reduction in the intensity of the light after every subsequent hit.
+

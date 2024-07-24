@@ -1,0 +1,45 @@
+this class renders the image by taking rays through the camera and interacting
+with the scene
+
+the fields are self explanatory
+
+the render function is important though.. lets see what it has to do in the program
+
+    public void render(Image image) {
+        Random rand = new Random();
+        System.out.println("Rendering Image ...");
+
+        int progress_count = cols/10;
+        int count = 0;
+        for (int i = 0; i < cols; i++) {
+            if (i != 0 && i % progress_count == 0) {
+                count += 10;
+                System.out.println(count + "% completed.");
+            }
+            for (int j = 0; j < rows; j++) {
+                Color pixelColor = new Color(0, 0, 0);
+                for (int s = 0; s < samplesPerPixel; s++) {
+                    double u = (i + rand.nextDouble()) / cols;
+                    double v = (j + rand.nextDouble()) / rows;
+
+                    Ray ray = camera.getRay(u, v);
+                    pixelColor = pixelColor.add(scene.get_ray_color(ray, 0));
+                }
+                pixelColor = pixelColor.divide_by_scalar_clr(samplesPerPixel);
+                image.setPixel(rows - 1 - j, i, pixelColor);
+            }
+        }
+    }
+
+    i --> no of cols
+    j --> no of rows
+
+    pixelCoplor == empty px clr which would get added up per sample per px after which its averaged out for anti aliasing
+
+    u, v are the relavive units that take the value between 0-1 this is done to retain the scale of the image independent of the res.
+
+    now we calculate the ray at this px taking u and v
+
+    now we calculate the pxclr and accumulate it
+
+    we average the px clr and set the px to that clr.
